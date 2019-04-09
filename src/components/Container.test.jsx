@@ -19,7 +19,7 @@ jest.mock('axios', () => {
     get: () => {
       return Promise.resolve({
         data: [
-          { id: 1, text: 'be montered or be bad' },
+          { id: 1, text: 'be mentored or be bad' },
           { id: 2, text: 'have fun' },
           { id: 3, text: 'use network tab' },
         ],
@@ -32,8 +32,7 @@ jest.mock('axios', () => {
 DIFFERENCE BETWEEN get, query, find METHODS:
   - get will crash if no match
   - query will return null if no match
-  - find 
-
+  - find will WAIT and only FAIL after 5s (so you can use it with ASYNC,AWAIT)
 */
 
 describe('Container', () => {
@@ -59,5 +58,26 @@ describe('Container', () => {
     // on the rendered component
     // expect(wrapper.queryByText('loading...')).toBeFalsy();
     expect(wrapper.queryByText(/loading/i)).toBeFalsy();
+  });
+
+  // this is a ASYNC function!
+  it('renders quotes texts', async () => {
+    const wrapper = rtl.render(<Container />);
+    // before teh btn click. check if the quotes are NOT rendered
+    expect(wrapper.queryByText(/mentored/i)).toBeFalsy();
+
+    // how do you CLICK on the button to invoke the request?
+    // click() takes "selector" to target the button
+    // fires an event that will fetch quotes
+    rtl.fireEvent.click(wrapper.getByText(/get quotes/i));
+
+    // check if the quotes were rendered (DOM contains the word "mentored")
+    // awaits for a quote to be there
+    await wrapper.findByText(/mentored/i);
+
+    // now you can run assertions
+    expect(wrapper.getByText(/mentored/i));
+    expect(wrapper.getByText(/fun/i));
+    expect(wrapper.getByText(/network/i));
   });
 });
