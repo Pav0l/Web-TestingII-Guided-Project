@@ -6,6 +6,36 @@ import Container from './Container';
 // to the component can persist between tests
 afterEach(rtl.cleanup);
 
+// To test axios requests, we need to mock it first,
+// because we don't want to make real requests while testing
+// const quotes = [
+//   { id: 1, text: 'be montered or be bad' },
+//   { id: 2, text: 'have fun' },
+//   { id: 3, text: 'use network tab' },
+// ];
+
+jest.mock('axios', () => {
+  return {
+    get: () => {
+      return Promise.resolve({
+        data: [
+          { id: 1, text: 'be montered or be bad' },
+          { id: 2, text: 'have fun' },
+          { id: 3, text: 'use network tab' },
+        ],
+      });
+    },
+  };
+});
+
+/*
+DIFFERENCE BETWEEN get, query, find METHODS:
+  - get will crash if no match
+  - query will return null if no match
+  - find 
+
+*/
+
 describe('Container', () => {
   it('outputs "Hello World!" message', () => {
     // RTL executes our component, so it spits out the DOM it produces
