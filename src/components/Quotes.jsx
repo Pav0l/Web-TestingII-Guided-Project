@@ -8,7 +8,9 @@ export default function Quotes(props) {
   return (
     <div>
       {props.quotes.map(q => (
-        <div key={q.id}>{q.text}</div>
+        <div data-testid='quote' key={q.id}>
+          {q.text}
+        </div>
       ))}
     </div>
   );
