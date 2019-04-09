@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class Quotes extends Component {
-  render() {
-    const { quotes } = this.props;
-    return (
-      <div>
-        {quotes.map(q => (
-          <div key={q.id}>{q.text}</div>
-        ))}
-      </div>
-    );
+export default function Quotes(props) {
+  if (!props.quotes || !props.quotes.length) {
+    return <div>Sad! No quotes :(</div>;
   }
+
+  return (
+    <div>
+      {props.quotes.map(q => (
+        <div key={q.id}>{q.text}</div>
+      ))}
+    </div>
+  );
 }
